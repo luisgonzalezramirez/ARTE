@@ -21,7 +21,3 @@ Thumbs.db
 *.aux
 *.out
 *.toc
-
-# Data (IMPORTANT)
-Pleiades26.csv
-Pleiades_table_config.yaml
