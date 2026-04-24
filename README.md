@@ -107,7 +107,9 @@ columns:
 
 ### 4.2. Run
 
+```bash
 python cdsdat_maker.py examples/stars.csv examples/stars_cds_config.yaml -o examples/stars.dat
+```
 
 ### 4.3. What Happens Automatically
 
@@ -125,7 +127,9 @@ Output is fixed-width with proper alignment
 
 ### 5.1 Run
 
+```bash
 python cdsreadme_maker.py examples/stars.csv examples/stars_cds_config.yaml examples/stars.dat -o examples/ReadMe
+```
 
 ### 5.2 Output Includes
 
@@ -153,10 +157,13 @@ And these columns must exist in both:
 
 CSV
 YAML columns
-6.2 80-character Lines
+
+### 6.2 80-character Lines
+
 CDS ReadMe lines must be ≤ 80 characters
 ARTE automatically wraps text blocks
-6.3 Scientific Notation
+
+### 6.3 Scientific Notation
 
 Large values (e.g. X-ray luminosity):
 
@@ -189,14 +196,14 @@ python cdsreadme_maker.py stars.csv stars_cds_config.yaml stars.dat -o ReadMe
 ###  8.3. Generate LaTeX table
 python longtable_maker.py stars.csv longtable_config.yaml -o table.txt
 
-### 9. Design Philosophy
+## 9. Design Philosophy
 
 YAML = what the user defines
 Python = what ARTE infers
 No duplicated information
 CDS compliance by construction
 
-### 10. Common Errors
+## 10. Common Errors
 
 Missing coordinate block
 ValueError: Missing required 'coordinates' block
@@ -214,7 +221,7 @@ Misaligned columns
 
 forcing wrong format not using scientific notation
 
-### 11. Future Extensions
+## 11. Future Extensions
 
 Planned features:
 
@@ -222,7 +229,7 @@ Full CDS validation mode
 Byte alignment diagnostics
 Automatic reference code handling
 
-### 12. Final Note
+## 12. Final Note
 
 ARTE is designed to make CDS table preparation:
 
