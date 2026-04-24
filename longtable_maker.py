@@ -159,6 +159,21 @@ def apply_scale_factor_to_unit(unit: str, scale: float) -> str:
 
     unit = "" if unit is None else str(unit).strip()
 
+    if "$" in unit:
+        raise ValueError(
+            f"Unit '{unit}' should not contain '$'. "
+            "ARTE handles math mode automatically."
+        )
+
+    # Remove outer $ if present
+    if unit.startswith("$") and unit.endswith("$"):
+        unit = unit[1:-1]
+
+    if unit.startswith("(") and unit.endswith(")"):
+        inside = unit[1:-1]
+    else:
+        inside = unit
+
     if unit == "":
         return rf"($10^{{{exponent}}}$)"
 

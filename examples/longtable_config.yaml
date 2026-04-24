@@ -42,7 +42,7 @@ columns:
 
   - id: lbol
     header: "$L$"
-    unit: "($L_\\odot$)"
+    unit: "(L_\\odot)"
     type: value_error_asymmetric
     value_column: Lbol_Lsun
     error_up_column: Lbol_Lsun_error_up
