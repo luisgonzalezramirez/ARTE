@@ -1,0 +1,72 @@
+table:
+  caption: "Mock stellar sample for testing the longtable generator."
+  label: "tab:mock_stars"
+  font_size: "footnotesize"
+
+columns:
+  - id: name
+    header: "Name"
+    unit: ""
+    type: string
+    column: Name
+
+  - id: star_id
+    header: "ID"
+    unit: ""
+    type: float
+    column: StarID
+    decimals: 0
+
+  - id: spt
+    header: "SpT"
+    unit: ""
+    type: string
+    column: SpT
+
+  - id: distance
+    header: "$d$"
+    unit: "(pc)"
+    type: float
+    column: Distance_pc
+    decimals: 1
+    math_mode: true
+
+  - id: prot
+    header: "$P_{\\rm rot}$"
+    unit: "(d)"
+    type: value_error
+    value_column: Prot_d
+    error_column: Prot_d_error
+    decimals: global_from_error
+    align_uncertainty: true
+
+  - id: lbol
+    header: "$L$"
+    unit: "($L_\\odot$)"
+    type: value_error_asymmetric
+    value_column: Lbol_Lsun
+    error_up_column: Lbol_Lsun_error_up
+    error_down_column: Lbol_Lsun_error_down
+    scale: 1000.0
+    decimals: global_from_error
+    align_uncertainty: true
+
+  - id: hz
+    header: "$a_{\\rm HZ}$"
+    unit: "(au)"
+    type: value_error_asymmetric
+    value_column: HZ_au
+    error_up_column: HZ_au_error_up
+    error_down_column: HZ_au_error_down
+    decimals: global_from_error
+    align_uncertainty: true
+
+  - id: lx
+    header: "$L_{\\rm X}$"
+    unit: "(erg s$^{-1}$)"
+    type: value_error
+    value_column: Lx_erg_s
+    error_column: Lx_erg_s_error
+    decimals: global_from_error
+    align_uncertainty: true
+    scientific_factor: true

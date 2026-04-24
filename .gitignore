@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.pyc
+
+# Environments
+.venv/
+env/
+envs/
+C:\envs/
+
+# VSCode
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Outputs
+*.txt
+*.log
+*.aux
+*.out
+*.toc
+
+# Data (IMPORTANT)
+Pleiades26.csv
+Pleiades_table_config.yaml
