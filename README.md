@@ -225,6 +225,7 @@ forcing wrong format not using scientific notation
 
 Planned features:
 
+VOTable and FITS compatibility
 Full CDS validation mode
 Byte alignment diagnostics
 Automatic reference code handling
