@@ -4,7 +4,7 @@ import argparse
 from pathlib import Path
 
 import numpy as np
-import pandas as pd
+import pandas as pn
 import yaml
 
 
@@ -12,7 +12,7 @@ import yaml
 # GENERIC UTILITIES
 # ============================================================
 def is_missing(x) -> bool:
-    return pd.isna(x) or str(x).strip() == ""
+    return pn.isna(x) or str(x).strip() == ""
 
 
 def latex_escape(s: str) -> str:
@@ -75,24 +75,24 @@ def integer_digits(x: float) -> int:
 
 
 def get_positive_scaled_values(
-    df: pd.DataFrame,
+    df: pn.DataFrame,
     columns: list[str],
     scale: float = 1.0,
-) -> pd.Series:
+) -> pn.Series:
     vals = []
 
     for col in columns:
-        s = pd.to_numeric(df[col], errors="coerce")
+        s = pn.to_numeric(df[col], errors="coerce")
         vals.append(s)
 
-    out = pd.concat(vals, ignore_index=True)
+    out = pn.concat(vals, ignore_index=True)
     out = out[np.isfinite(out) & (out > 0)] * scale
 
     return out
 
 
 def get_global_decimals_from_error_columns(
-    df: pd.DataFrame,
+    df: pn.DataFrame,
     error_columns: list[str],
     scale: float = 1.0,
 ) -> int:
@@ -105,7 +105,7 @@ def get_global_decimals_from_error_columns(
 
 
 def get_max_error_integer_digits(
-    df: pd.DataFrame,
+    df: pn.DataFrame,
     error_columns: list[str],
     scale: float = 1.0,
 ) -> int:
@@ -185,16 +185,16 @@ def apply_scientific_factor_to_unit(unit: str, exponent: int) -> str:
 
 
 def common_scientific_exponent_from_columns(
-    df: pd.DataFrame,
+    df: pn.DataFrame,
     columns: list[str],
 ) -> int:
     vals = []
 
     for col in columns:
-        s = pd.to_numeric(df[col], errors="coerce")
+        s = pn.to_numeric(df[col], errors="coerce")
         vals.append(s)
 
-    vals = pd.concat(vals, ignore_index=True)
+    vals = pn.concat(vals, ignore_index=True)
     vals = vals[np.isfinite(vals) & (vals != 0)]
 
     if len(vals) == 0:
@@ -230,7 +230,7 @@ def apply_scientific_factor_to_unit(unit: str, exponent: int) -> str:
 # DECIMAL FORMAT HELPERS
 # ============================================================
 def get_decimals_for_symmetric_error(
-    r: pd.Series,
+    r: pn.Series,
     cfg: dict,
     column_props: dict,
 ) -> int:
@@ -251,7 +251,7 @@ def get_decimals_for_symmetric_error(
 
 
 def get_decimals_for_asymmetric_error(
-    r: pd.Series,
+    r: pn.Series,
     cfg: dict,
     column_props: dict,
 ) -> int:
@@ -285,11 +285,11 @@ def get_decimals_for_asymmetric_error(
 # ============================================================
 # CELL FORMATTERS
 # ============================================================
-def format_string(r: pd.Series, cfg: dict) -> str:
+def format_string(r: pn.Series, cfg: dict) -> str:
     return latex_escape(r[cfg["column"]])
 
 
-def format_float(r: pd.Series, cfg: dict) -> str:
+def format_float(r: pn.Series, cfg: dict) -> str:
     x = r[cfg["column"]]
 
     if is_missing(x):
@@ -315,7 +315,7 @@ def format_limit_value(val: float, cfg: dict, nd: int) -> str:
 
 
 def format_value_error(
-    r: pd.Series,
+    r: pn.Series,
     cfg: dict,
     column_props: dict,
 ) -> str:
@@ -352,7 +352,7 @@ def format_value_error(
 
 
 def format_value_error_asymmetric(
-    r: pd.Series,
+    r: pn.Series,
     cfg: dict,
     column_props: dict,
 ) -> str:
@@ -403,7 +403,7 @@ def format_value_error_asymmetric(
 
 
 def format_cell(
-    r: pd.Series,
+    r: pn.Series,
     cfg: dict,
     column_props: dict,
 ) -> str:
@@ -461,7 +461,7 @@ def required_columns(config: dict) -> list[str]:
 
 
 def compute_global_column_properties(
-    df: pd.DataFrame,
+    df: pn.DataFrame,
     config: dict,
 ) -> dict:
     out = {}
@@ -594,7 +594,7 @@ def build_header(config: dict) -> str:
 
 
 def build_longtable(
-    df: pd.DataFrame,
+    df: pn.DataFrame,
     config: dict,
 ) -> str:
     column_props = compute_global_column_properties(df, config)
@@ -636,7 +636,7 @@ def main() -> None:
     with open(args.yaml, "r", encoding="utf-8") as f:
         config = yaml.safe_load(f)
 
-    df = pd.read_csv(args.csv)
+    df = pn.read_csv(args.csv)
 
     if args.nrows is not None:
         df = df.head(args.nrows)

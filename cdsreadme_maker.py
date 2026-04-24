@@ -4,6 +4,9 @@ import argparse
 from pathlib import Path
 import textwrap
 
+import numpy as np
+import pandas as pn
+
 import yaml
 
 
@@ -13,11 +16,92 @@ def cds_format_width(fmt: str) -> int:
     if kind in {"A", "I"}:
         return int(fmt[1:])
 
-    if kind == "F":
+    if kind in {"F", "E"}:
         return int(fmt[1:].split(".")[0])
 
     raise ValueError(f"Unsupported CDS format: {fmt}")
 
+def is_missing(x) -> bool:
+    return pn.isna(x) or str(x).strip() == ""
+
+
+def count_decimals(x) -> int:
+    if is_missing(x):
+        return 0
+
+    s = str(x).strip()
+
+    if "e" in s.lower():
+        return 5
+
+    if "." not in s:
+        return 0
+
+    return len(s.split(".")[1].rstrip("0"))
+
+
+def infer_string_format(series: pn.Series) -> str:
+    vals = series.dropna().astype(str)
+    width = max((len(v) for v in vals), default=1)
+    return f"A{width}"
+
+
+def infer_integer_format(series: pn.Series) -> str:
+    vals = pn.to_numeric(series, errors="coerce")
+    vals = vals[np.isfinite(vals)]
+
+    if len(vals) == 0:
+        return "I1"
+
+    width = max(len(str(int(abs(v)))) for v in vals)
+
+    if (vals < 0).any():
+        width += 1
+
+    return f"I{width}"
+
+
+def infer_float_format(series: pn.Series, scientific_threshold: float = 1e6) -> str:
+    vals = pn.to_numeric(series, errors="coerce")
+    vals = vals[np.isfinite(vals)]
+
+    if len(vals) == 0:
+        return "F1.0"
+
+    max_abs = float(np.nanmax(np.abs(vals)))
+
+    if max_abs >= scientific_threshold or (0 < max_abs < 1e-4):
+        return "E12.5"
+
+    decimals = max(count_decimals(v) for v in series)
+
+    formatted = [f"{float(v):.{decimals}f}" for v in vals]
+    width = max(len(v) for v in formatted)
+
+    return f"F{width}.{decimals}"
+
+
+def infer_cds_format(series: pn.Series) -> str:
+    vals = series.dropna()
+
+    if len(vals) == 0:
+        return "A1"
+
+    numeric = pn.to_numeric(vals, errors="coerce")
+
+    if numeric.notna().all():
+        if np.all(np.isclose(numeric, np.round(numeric))):
+            return infer_integer_format(vals)
+
+        return infer_float_format(vals)
+
+    return infer_string_format(vals)
+
+
+def infer_formats(df: pn.DataFrame, config: dict) -> None:
+    for col in config["columns"]:
+        if "format" not in col or col["format"] in {None, "auto"}:
+            col["format"] = infer_cds_format(df[col["column"]])
 
 def compute_byte_ranges(columns: list[dict]) -> list[dict]:
     out = []
@@ -162,8 +246,39 @@ def make_references(config: dict) -> str:
 
     return "\n".join(lines)
 
+def validate_coordinates_block(config: dict) -> None:
+    if "coordinates" not in config:
+        raise ValueError(
+            "Missing required 'coordinates' block in YAML. "
+            "CDS catalogues should define RA and Dec columns."
+        )
+
+    coord = config["coordinates"]
+
+    required_keys = ["ra_column", "dec_column"]
+    missing_keys = [k for k in required_keys if k not in coord]
+
+    if missing_keys:
+        raise ValueError(f"Missing keys in coordinates block: {missing_keys}")
+
+    column_names = {c["column"] for c in config["columns"]}
+
+    missing_columns = [
+        coord["ra_column"],
+        coord["dec_column"],
+    ]
+
+    missing_columns = [c for c in missing_columns if c not in column_names]
+
+    if missing_columns:
+        raise ValueError(
+            "Coordinate columns are defined in 'coordinates' but are missing "
+            f"from the byte-by-byte columns list: {missing_columns}"
+        )
 
 def build_readme(config: dict, dat_file: Path) -> str:
+    validate_coordinates_block(config)
+
     title = config["catalog"]["title"]
     authors = config["catalog"]["authors"]
     keywords = config["catalog"].get("keywords", [])
@@ -226,6 +341,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(
         description="Generate a CDS-style ReadMe from a YAML configuration and .dat file."
     )
+    parser.add_argument("csv", help="Input CSV file used to infer CDS formats.")
     parser.add_argument("yaml", help="CDS YAML configuration file.")
     parser.add_argument("dat", help="Input .dat file.")
     parser.add_argument("-o", "--output", default="ReadMe", help="Output ReadMe file.")
@@ -234,6 +350,14 @@ def main() -> None:
 
     with open(args.yaml, "r", encoding="utf-8") as f:
         config = yaml.safe_load(f)
+
+    df = pn.read_csv(args.csv, dtype=str)
+
+    missing = [c["column"] for c in config["columns"] if c["column"] not in df.columns]
+    if missing:
+        raise ValueError(f"Missing columns in CSV: {missing}")
+
+    infer_formats(df, config)
 
     dat_file = Path(args.dat)
     text = build_readme(config, dat_file)

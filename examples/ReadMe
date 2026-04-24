@@ -1,0 +1,71 @@
+(ARTE test catalogue, 2026)
+================================================================================
+Mock stellar catalogue for ARTE CDS-format testing
+    González-Ramírez et al. 2026
+================================================================================
+Keywords:
+  Stars: fundamental parameters
+  Stars: activity
+  Catalogs
+
+Objects:
+    -----------------------------------------
+       RA   (2000)   DE    Designation(s)
+    -----------------------------------------
+        00.00        +00.00   Mock stellar sample
+
+Abstract:
+  This is a mock stellar catalogue generated to test the ARTE CDS table
+  generation tools.
+
+
+Description:
+  The table contains mock stellar identifiers, spectral types, distances,
+  rotation periods, bolometric luminosities, habitable-zone distances, and X-ray
+  luminosities. The values are intended only for software testing.
+
+
+File Summary:
+--------------------------------------------------------------------------------
+ FileName         Lrecl  Records  Explanations
+--------------------------------------------------------------------------------
+ ReadMe              80      .   This file
+ stars.dat        167      20   Mock stellar sample for ARTE CDS-format testing
+--------------------------------------------------------------------------------
+
+Byte-by-byte Description of file: stars.dat
+--------------------------------------------------------------------------------
+    Bytes   Format  Units  Label                     Explanations
+--------------------------------------------------------------------------------
+   1-   9   F9.6    deg    RAJ2000                   Right ascension (ICRS,
+                                                   J2000)
+  11-  19   F9.6    deg    DEJ2000                   Declination (ICRS, J2000)
+  21-  36   A16     ---    Name                      Mock stellar identifier
+  38-  48   I11     ---    StarID                    Mock integer source
+                                                   identifier
+  50-  52   A3      ---    SpT                       Spectral type
+  54-  58   F5.1    pc     Dist                      Distance
+  60-  63   F4.1    d      Prot                      Rotation period
+  65-  67   F3.1    d      e_Prot                    Uncertainty on Prot
+  69-  74   F6.4    Lsun   Lbol                      Bolometric luminosity
+  76-  81   F6.4    Lsun   E_Lbol                    Upper uncertainty on Lbol
+  83-  88   F6.4    Lsun   e_Lbol                    Lower uncertainty on Lbol
+  90-  94   F5.3    au     HZ                        Approximate habitable-zone
+                                                   distance
+  96- 100   F5.3    au     E_HZ                      Upper uncertainty on HZ
+ 102- 106   F5.3    au     e_HZ                      Lower uncertainty on HZ
+ 108- 137   I30     erg/s  Lx                        X-ray luminosity
+ 139- 167   I29     erg/s  e_Lx                      Uncertainty on Lx
+--------------------------------------------------------------------------------
+
+Note on this catalogue:
+  This catalogue is a purely artificial test catalogue. It should not be used
+  for scientific analysis.
+
+
+References:
+================================================================================
+2026yCat.test....A  ARTE internal test catalogue
+
+================================================================================
+     (prepared by author / ARTE)

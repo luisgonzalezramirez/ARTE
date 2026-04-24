@@ -1,0 +1,127 @@
+catalog:
+  header: "(ARTE test catalogue, 2026)"
+  title: "Mock stellar catalogue for ARTE CDS-format testing"
+  authors: "González-Ramírez et al. 2026"
+
+  keywords:
+    - "Stars: fundamental parameters"
+    - "Stars: activity"
+    - "Catalogs"
+
+  abstract: >
+    This is a mock stellar catalogue generated to test the ARTE CDS table
+    generation tools.
+
+  description: >
+    The table contains mock stellar identifiers, spectral types, distances,
+    rotation periods, bolometric luminosities, habitable-zone distances, and
+    X-ray luminosities. The values are intended only for software testing.
+
+  prepared_by: "     (prepared by author / ARTE)"
+
+objects:
+  - name: "Mock stellar sample"
+    ra: "00.00"
+    dec: "+00.00"
+
+file:
+  dat_name: "stars.dat"
+  explanation: "Mock stellar sample for ARTE CDS-format testing"
+
+coordinates:
+  ra_column: RAJ2000
+  dec_column: DEJ2000
+  frame: ICRS
+  equinox: J2000
+  unit: deg
+
+columns:
+  - column: RAJ2000
+    label: RAJ2000
+    unit: deg
+    description: "Right ascension (ICRS, J2000)"
+
+  - column: DEJ2000
+    label: DEJ2000
+    unit: deg
+    description: "Declination (ICRS, J2000)"
+
+  - column: Name
+    label: Name
+    unit: "---"
+    description: "Mock stellar identifier"
+
+  - column: StarID
+    label: StarID
+    unit: "---"
+    description: "Mock integer source identifier"
+
+  - column: SpT
+    label: SpT
+    unit: "---"
+    description: "Spectral type"
+
+  - column: Distance_pc
+    label: Dist
+    unit: pc
+    description: "Distance"
+
+  - column: Prot_d
+    label: Prot
+    unit: d
+    description: "Rotation period"
+
+  - column: Prot_d_error
+    label: e_Prot
+    unit: d
+    description: "Uncertainty on Prot"
+
+  - column: Lbol_Lsun
+    label: Lbol
+    unit: Lsun
+    description: "Bolometric luminosity"
+
+  - column: Lbol_Lsun_error_up
+    label: E_Lbol
+    unit: Lsun
+    description: "Upper uncertainty on Lbol"
+
+  - column: Lbol_Lsun_error_down
+    label: e_Lbol
+    unit: Lsun
+    description: "Lower uncertainty on Lbol"
+
+  - column: HZ_au
+    label: HZ
+    unit: au
+    description: "Approximate habitable-zone distance"
+
+  - column: HZ_au_error_up
+    label: E_HZ
+    unit: au
+    description: "Upper uncertainty on HZ"
+
+  - column: HZ_au_error_down
+    label: e_HZ
+    unit: au
+    description: "Lower uncertainty on HZ"
+
+  - column: Lx_erg_s
+    label: Lx
+    unit: erg/s
+    description: "X-ray luminosity"
+
+  - column: Lx_erg_s_error
+    label: e_Lx
+    unit: erg/s
+    description: "Uncertainty on Lx"
+
+notes:
+  - title: "Note on this catalogue"
+    text: >
+      This catalogue is a purely artificial test catalogue. It should not be
+      used for scientific analysis.
+
+references:
+  - bibcode: "2026yCat.test....A"
+    text: "ARTE internal test catalogue"
