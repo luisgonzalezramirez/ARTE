@@ -1,6 +1,6 @@
 # ARTE — User Guide (CDS Tables & LaTeX Longtables)
 
-**ARTE** (Astronomical Routine of Tables Engine) is a lightweight toolkit to:
+**ARTE** (AstRonomical Tables Engine) is a lightweight toolkit to:
 - Generate LaTeX `longtable`s from CSV + YAML
 - Generate CDS-compliant `.dat` tables (fixed-width)
 - Generate CDS `ReadMe` files (byte-by-byte description)
